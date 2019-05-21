@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable max-len */
 import React from 'react';
@@ -58,6 +59,33 @@ class Main extends React.Component {
         { name: 'ENGS 77', took: false },
       ],
     };
+    this.courseNames = this.state.courses.map(course => course.name);
+    this.requirements = {
+      core: {
+        courses: this.courseNames.slice(0, 5),
+        group1: {
+          courses: this.courseNames.slice(0, 3),
+        },
+        group2: {
+          courses: this.courseNames.slice(3, 5),
+        },
+      },
+      computerScience: {
+        courses: this.courseNames.slice(5, 7),
+      },
+      breadth: {
+        courses: this.courseNames.slice(7, this.courseNames.length + 1),
+        group1: {
+          courses: this.courseNames.slice(7, 10),
+        },
+        group2: {
+          courses: this.courseNames.slice(10, 14),
+        },
+        group3: {
+          courses: this.courseNames.slice(14, this.courseNames.length + 1),
+        },
+      },
+    };
   }
 
   checker = () => {
@@ -65,7 +93,10 @@ class Main extends React.Component {
     // Core
     // Group 1
     let passed = true;
-    this.state.courses.filter(req => (req.name === 'ENGS 22' || req.name === 'ENGS 27' || req.name === 'ENGS 31')).forEach((req) => {
+    // this.state.courses.filter(req => (req.name === 'ENGS 22' || req.name === 'ENGS 27' || req.name === 'ENGS 31')).forEach((req) => {
+    //   if (!req.took) passed = false;
+    // });
+    this.state.courses.filter(req => (this.requirements.core.group1.courses.includes(req.name))).forEach((req) => {
       if (!req.took) passed = false;
     });
     if (!passed) {
@@ -74,7 +105,10 @@ class Main extends React.Component {
 
     // Group 2
     passed = false;
-    this.state.courses.filter(req => (req.name === 'ENGS 23' || req.name === 'ENGS 24')).forEach((req) => {
+    // this.state.courses.filter(req => (req.name === 'ENGS 23' || req.name === 'ENGS 24')).forEach((req) => {
+    //   if (req.took) passed = true;
+    // });s
+    this.state.courses.filter(req => (this.requirements.core.group2.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -83,7 +117,7 @@ class Main extends React.Component {
 
     // Computer Science
     passed = false;
-    this.state.courses.filter(req => (req.name === 'COSC 50' || req.name === 'ENGS 50')).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.computerScience.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -92,11 +126,11 @@ class Main extends React.Component {
 
     // Breadth
     // 5 courses
-    if (this.state.courses.filter(req => (req.name === 'ENGS 32' || req.name === 'ENGS 62' || req.name === 'COSC 51' || req.name === 'ENGS 26' || req.name === 'ENGS 68' || req.name === 'ENGS 92' || req.name === 'COSC 60' || req.name === 'ENGS 91' || req.name === 'COSC 31' || req.name === 'COSC 58' || req.name === 'COSC 77')).length < 5) failures.push('Breadth / Less than 5 courses');
+    if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name) && (req.took)))).length < 5) failures.push('Breadth / Less than 5 courses');
 
     // Group 1
     passed = false;
-    this.state.courses.filter(req => (req.name === 'ENGS 32' || req.name === 'ENGS 62' || req.name === 'COSC 51')).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.breadth.group1.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -105,7 +139,7 @@ class Main extends React.Component {
 
     // Group 2
     passed = false;
-    this.state.courses.filter(req => (req.name === 'ENGS 26' || req.name === 'ENGS 68' || req.name === 'ENGS 92' || req.name === 'COSC 60')).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.breadth.group2.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -114,15 +148,15 @@ class Main extends React.Component {
 
     // Group 3
     passed = false;
-    this.state.courses.filter(req => (req.name === 'ENGS 91' || req.name === 'COSC 31' || req.name === 'COSC 58' || req.name === 'COSC 77')).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.breadth.group3.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
       failures.push('Breadth / Group 3');
     }
     // 3 computer science
-    if (this.state.courses.filter(req => (req.name.substring(0, 4) === 'COSC')).length < 3) failures.push('Breadth / Less than 3 computer science courses');
-
+    if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name)) && (req.name.substring(0, 4) === 'COSC') && (req.took))).length < 3) failures.push('Breadth / Less than 3 computer science courses');
+    console.log(this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name)) && (req.name.substring(0, 4) === 'COSC') && (req.took))));
     return failures;
   }
 
@@ -160,7 +194,7 @@ class Main extends React.Component {
           <Typography variant="title">Degree Checker for ENGS  modified CS</Typography>
           <List className={classes.root}>
             {this.state.courses.map(req => (
-              <ListItem key={req.name} dense button onClick={() => this.handleToggle(req.name)}>
+              <ListItem key={() => this.state.courses.indexOf(req)} dense button onClick={() => this.handleToggle(req.name)}>
                 <Checkbox
                   checked={req.took}
                   tabIndex={-1}
