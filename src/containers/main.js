@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable max-len */
@@ -193,8 +194,8 @@ class Main extends React.Component {
         <CardContent id="form">
           <Typography variant="title">Degree Checker for ENGS  modified CS</Typography>
           <List className={classes.root}>
-            {this.state.courses.map(req => (
-              <ListItem key={() => this.state.courses.indexOf(req)} dense button onClick={() => this.handleToggle(req.name)}>
+            {this.state.courses.map((req, index) => (
+              <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
                 <Checkbox
                   checked={req.took}
                   tabIndex={-1}
