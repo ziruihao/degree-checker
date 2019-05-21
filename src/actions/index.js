@@ -1,20 +1,19 @@
-// ActionTypes, just for convenience of String references
 
 export const ActionTypes = {
-  INCREMENT: 'INCREMENT',
-  DECREMENT: 'DECREMENT',
+  ADD_COURSE: 'ADD_COURSE',
+  REMOVE_COURSE: 'REMOVE_COURSE',
 };
 
-export function increment() {
+export function addCourse(courseName) {
   return {
-    type: ActionTypes.INCREMENT,
-    payload: null,
+    type: ActionTypes.ADD_COURSE,
+    payload: courseName,
   };
 }
 
-export function decrement() {
+export function removeCourse(courseName) {
   return {
-    type: ActionTypes.DECREMENT,
-    payload: null,
+    type: ActionTypes.REMOVE_COURSE,
+    payload: courseName,
   };
 }

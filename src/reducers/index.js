@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 
-import CountReducer from './count-reducer';
+import CourseReducer from './course-reducer';
+import RequirementReducer from './requirement-reducer';
 
 const rootReducer = combineReducers({
-  count: CountReducer,
+  courses: CourseReducer,
+  requirements: RequirementReducer,
 });
 
 export default rootReducer;
