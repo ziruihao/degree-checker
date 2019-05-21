@@ -20,9 +20,9 @@ import { addCourse, removeCourse } from '../actions/index';
 const styles = {
   card: {
     width: 800,
-  },
-  pos: {
-    marginBottom: 12,
+    padding: 25,
+    display: 'flex',
+    flexDirection: 'row',
   },
   inputArea: {
     display: 'flex',
@@ -190,7 +190,7 @@ class Main extends React.Component {
     }
     return (
       <Card className={classes.card}>
-        <CardContent>
+        <CardContent id="form">
           <Typography variant="title">Degree Checker for ENGS  modified CS</Typography>
           <List className={classes.root}>
             {this.state.courses.map(req => (
@@ -205,6 +205,8 @@ class Main extends React.Component {
               </ListItem>
             ))}
           </List>
+        </CardContent>
+        <CardContent id="results">
           {result}
           {why}
           <Button variant="contained" onClick={this.reset}>Reset</Button>
