@@ -200,6 +200,7 @@ class Main extends React.Component {
                   tabIndex={-1}
                   disableRipple
                   className={styles.skinnyCheckBox}
+                  color="primary"
                 />
                 <ListItemText primary={req.name} />
               </ListItem>
@@ -209,7 +210,7 @@ class Main extends React.Component {
         <CardContent id="results">
           {result}
           {why}
-          <Button variant="contained" onClick={this.reset}>Reset</Button>
+          <Button variant="contained" color="primary" onClick={this.reset}>Reset</Button>
         </CardContent>
       </Card>
     );
