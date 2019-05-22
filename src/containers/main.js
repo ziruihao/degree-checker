@@ -20,10 +20,11 @@ import { addCourse, removeCourse } from '../actions/index';
 
 const styles = {
   card: {
-    width: 800,
+    width: 900,
     padding: 25,
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   inputArea: {
     display: 'flex',
@@ -31,6 +32,18 @@ const styles = {
   },
   skinnyCheckBox: {
     padding: 0,
+  },
+  mb: {
+    marginBottom: 25,
+  },
+  mt: {
+    marginTop: 25,
+  },
+  passed: {
+    color: 'green',
+  },
+  reason: {
+    marginBottom: 5,
   },
 };
 
@@ -101,7 +114,7 @@ class Main extends React.Component {
       if (!req.took) passed = false;
     });
     if (!passed) {
-      failures.push('Engineering Core Courses / Group 1');
+      failures.push('Engineering Core Courses / Need all courses from Group 1');
     }
 
     // Group 2
@@ -113,7 +126,7 @@ class Main extends React.Component {
       if (req.took) passed = true;
     });
     if (!passed) {
-      failures.push('Engineering Core Courses / Group 2');
+      failures.push('Engineering Core Courses / Need at least one course from Group 2');
     }
 
     // Computer Science
@@ -122,12 +135,12 @@ class Main extends React.Component {
       if (req.took) passed = true;
     });
     if (!passed) {
-      failures.push('Computer Science Courses');
+      failures.push('Computer Science Courses / Need either COSC 50 or ENGS 50');
     }
 
     // Breadth
     // 5 courses
-    if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name) && (req.took)))).length < 5) failures.push('Breadth / Less than 5 courses');
+    if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name) && (req.took)))).length < 5) failures.push('Breadth / Need at least 5 courses');
 
     // Group 1
     passed = false;
@@ -135,7 +148,7 @@ class Main extends React.Component {
       if (req.took) passed = true;
     });
     if (!passed) {
-      failures.push('Breadth / Group 1');
+      failures.push('Breadth / Need at least one from Group 1');
     }
 
     // Group 2
@@ -144,7 +157,7 @@ class Main extends React.Component {
       if (req.took) passed = true;
     });
     if (!passed) {
-      failures.push('Breadth / Group 2');
+      failures.push('Breadth / Need at least one from Group 2');
     }
 
     // Group 3
@@ -153,10 +166,10 @@ class Main extends React.Component {
       if (req.took) passed = true;
     });
     if (!passed) {
-      failures.push('Breadth / Group 3');
+      failures.push('Breadth / Need at least one from Group 3');
     }
     // 3 computer science
-    if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name)) && (req.name.substring(0, 4) === 'COSC') && (req.took))).length < 3) failures.push('Breadth / Less than 3 computer science courses');
+    if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name)) && (req.name.substring(0, 4) === 'COSC') && (req.took))).length < 3) failures.push('Breadth / Need at least 3 computer science courses');
     console.log(this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name)) && (req.name.substring(0, 4) === 'COSC') && (req.took))));
     return failures;
   }
@@ -182,17 +195,18 @@ class Main extends React.Component {
   render() {
     const { classes } = this.props;
     const failures = this.checker();
-    let result = <Typography variant="h5" className={styles.passed}>Passed</Typography>;
+    let result = <Typography variant="title" className={[classes.passed, classes.mb]}>Passed!</Typography>;
     let why = '';
 
     if (failures.length > 0) {
-      result = <Typography variant="h5" color="error">Failed</Typography>;
-      why = failures.map(failure => <Typography variant="body1" color="error">{failure}</Typography>);
+      result = <Typography variant="title" color="error" className={classes.mb}>Failed, missing the following:</Typography>;
+      why = failures.map(failure => <Typography variant="body1" className={classes.reason} color="error">{failure}</Typography>);
     }
     return (
       <Card className={classes.card}>
         <CardContent id="form">
-          <Typography variant="title">Degree Checker for ENGS  modified CS</Typography>
+          <Typography variant="title" className={classes.mb}>Degree Checker for ENGS modified CS</Typography>
+          <Typography variant="subtitle">Completed classes</Typography>
           <List className={classes.root}>
             {this.state.courses.map((req, index) => (
               <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
@@ -200,7 +214,7 @@ class Main extends React.Component {
                   checked={req.took}
                   tabIndex={-1}
                   disableRipple
-                  className={styles.skinnyCheckBox}
+                  className={classes.skinnyCheckBox}
                   color="primary"
                 />
                 <ListItemText primary={req.name} />
@@ -211,7 +225,7 @@ class Main extends React.Component {
         <CardContent id="results">
           {result}
           {why}
-          <Button variant="contained" color="primary" onClick={this.reset}>Reset</Button>
+          <Button variant="contained" color="primary" className={classes.mt} onClick={this.reset}>Reset</Button>
         </CardContent>
       </Card>
     );
