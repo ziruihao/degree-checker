@@ -170,7 +170,6 @@ class Main extends React.Component {
     }
     // 3 computer science
     if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name)) && (req.name.substring(0, 4) === 'COSC') && (req.took))).length < 3) failures.push('Breadth / Need at least 3 computer science courses');
-    console.log(this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name)) && (req.name.substring(0, 4) === 'COSC') && (req.took))));
     return failures;
   }
 
@@ -192,6 +191,125 @@ class Main extends React.Component {
     this.setState({ courses: coursesCopy });
   }
 
+  renderCheckList = () => {
+    const { classes } = this.props;
+    return (
+      <div id="checkList">
+        <div id="core">
+          <Typography variant="h5">Core</Typography>
+          <Typography variant="subheading">Group 1</Typography>
+          <List className={classes.root}>
+            {
+              this.state.courses.filter(req => (this.requirements.core.group1.courses.includes(req.name))).map((req, index) => (
+                <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
+                  <Checkbox
+                    checked={req.took}
+                    tabIndex={-1}
+                    disableRipple
+                    className={classes.skinnyCheckBox}
+                    color="primary"
+                  />
+                  <ListItemText primary={req.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+          <Typography variant="subheading">Group 2</Typography>
+          <List className={classes.root}>
+            {
+              this.state.courses.filter(req => (this.requirements.core.group2.courses.includes(req.name))).map((req, index) => (
+                <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
+                  <Checkbox
+                    checked={req.took}
+                    tabIndex={-1}
+                    disableRipple
+                    className={classes.skinnyCheckBox}
+                    color="primary"
+                  />
+                  <ListItemText primary={req.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+        </div>
+        <div id="computer science">
+          <Typography variant="h5">Computer Science</Typography>
+          <List className={classes.root}>
+            {
+              this.state.courses.filter(req => (this.requirements.computerScience.courses.includes(req.name))).map((req, index) => (
+                <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
+                  <Checkbox
+                    checked={req.took}
+                    tabIndex={-1}
+                    disableRipple
+                    className={classes.skinnyCheckBox}
+                    color="primary"
+                  />
+                  <ListItemText primary={req.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+        </div>
+        <div id="core">
+          <Typography variant="h5">Breadth</Typography>
+          <Typography variant="subheading">Group 1</Typography>
+          <List className={classes.root}>
+            {
+              this.state.courses.filter(req => (this.requirements.breadth.group1.courses.includes(req.name))).map((req, index) => (
+                <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
+                  <Checkbox
+                    checked={req.took}
+                    tabIndex={-1}
+                    disableRipple
+                    className={classes.skinnyCheckBox}
+                    color="primary"
+                  />
+                  <ListItemText primary={req.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+          <Typography variant="subheading">Group 2</Typography>
+          <List className={classes.root}>
+            {
+              this.state.courses.filter(req => (this.requirements.breadth.group2.courses.includes(req.name))).map((req, index) => (
+                <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
+                  <Checkbox
+                    checked={req.took}
+                    tabIndex={-1}
+                    disableRipple
+                    className={classes.skinnyCheckBox}
+                    color="primary"
+                  />
+                  <ListItemText primary={req.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+          <Typography variant="subheading">Group 3</Typography>
+          <List className={classes.root}>
+            {
+              this.state.courses.filter(req => (this.requirements.breadth.group3.courses.includes(req.name))).map((req, index) => (
+                <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
+                  <Checkbox
+                    checked={req.took}
+                    tabIndex={-1}
+                    disableRipple
+                    className={classes.skinnyCheckBox}
+                    color="primary"
+                  />
+                  <ListItemText primary={req.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+        </div>
+      </div>
+
+    );
+  }
+
   render() {
     const { classes } = this.props;
     const failures = this.checker();
@@ -200,27 +318,14 @@ class Main extends React.Component {
 
     if (failures.length > 0) {
       result = <Typography variant="title" color="error" className={classes.mb}>Failed, missing the following:</Typography>;
-      why = failures.map(failure => <Typography variant="body1" className={classes.reason} color="error">{failure}</Typography>);
+      why = failures.map(failure => <Typography variant="body1" key={failure} className={classes.reason} color="error">{failure}</Typography>);
     }
     return (
       <Card className={classes.card}>
         <CardContent id="form">
           <Typography variant="title" className={classes.mb}>Degree Checker for ENGS modified CS</Typography>
-          <Typography variant="subtitle">Completed classes</Typography>
-          <List className={classes.root}>
-            {this.state.courses.map((req, index) => (
-              <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
-                <Checkbox
-                  checked={req.took}
-                  tabIndex={-1}
-                  disableRipple
-                  className={classes.skinnyCheckBox}
-                  color="primary"
-                />
-                <ListItemText primary={req.name} />
-              </ListItem>
-            ))}
-          </List>
+          <Typography variant="subtitle1" className={classes.mb}>Completed classes</Typography>
+          {this.renderCheckList()}
         </CardContent>
         <CardContent id="results">
           {result}
