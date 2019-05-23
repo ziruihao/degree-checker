@@ -15,6 +15,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
 
 import { addCourse, removeCourse } from '../actions/index';
 
@@ -330,7 +331,8 @@ class Main extends React.Component {
         <CardContent id="results">
           {result}
           {why}
-          <Button variant="contained" color="primary" className={classes.mt} onClick={this.reset}>Reset</Button>
+          <Button variant="contained" color="primary" className={[classes.mt, classes.mb]} onClick={this.reset}>Reset</Button>
+          <Typography variant="p"><Link href="https://github.com/ziruihao/degree-checker-client">Github</Link></Typography>
         </CardContent>
       </Card>
     );
