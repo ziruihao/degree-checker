@@ -23,6 +23,7 @@ const styles = {
   card: {
     width: 900,
     padding: 25,
+    marginTop: 25,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -40,6 +41,14 @@ const styles = {
   mt: {
     marginTop: 25,
   },
+  hover: {
+    position: 'fixed',
+    // left: 'calc(50vw + 400px)',
+    top: 60,
+    // left: '50vw',
+    // top: '20vh',
+    boxShadow: '10px 40px 142px -6px rgba(0,0,0,0.42)',
+  },
   passed: {
     color: 'green',
   },
@@ -54,6 +63,15 @@ class Main extends React.Component {
     super(props);
     this.state = {
       courses: [
+        { name: 'MATH 3', took: false },
+        { name: 'MATH 8', took: false },
+        { name: 'MATH 13', took: false },
+        { name: 'COSC 1', took: false },
+        { name: 'COSC 10', took: false },
+        { name: 'PHYS 13', took: false },
+        { name: 'PHYS 14', took: false },
+        { name: 'CHEM 5', took: false },
+
         { name: 'ENGS 22', took: false },
         { name: 'ENGS 27', took: false },
         { name: 'ENGS 31', took: false },
@@ -71,47 +89,65 @@ class Main extends React.Component {
         { name: 'ENGS 91', took: false },
         { name: 'COSC 31', took: false },
         { name: 'COSC 58', took: false },
-        { name: 'ENGS 77', took: false },
+        { name: 'COSC 77', took: false },
+
+        { name: 'Project or Thesis', took: false },
+        { name: 'ENGS 86', took: false },
+        { name: 'ENGS 88', took: false },
+        { name: 'ENGS 89/90', took: false },
+
+
       ],
     };
     this.courseNames = this.state.courses.map(course => course.name);
     this.requirements = {
-      core: {
-        courses: this.courseNames.slice(0, 5),
-        group1: {
-          courses: this.courseNames.slice(0, 3),
-        },
-        group2: {
-          courses: this.courseNames.slice(3, 5),
-        },
+      pre: {
+        courses: this.courseNames.slice(0, 8),
       },
-      computerScience: {
-        courses: this.courseNames.slice(5, 7),
+      core: {
+        courses: this.courseNames.slice(8, 13),
+        groupA: {
+          courses: this.courseNames.slice(8, 11),
+        },
+        groupB: {
+          courses: this.courseNames.slice(11, 13),
+        },
+        computerScience: {
+          courses: this.courseNames.slice(13, 15),
+        },
       },
       breadth: {
-        courses: this.courseNames.slice(7, this.courseNames.length + 1),
-        group1: {
-          courses: this.courseNames.slice(7, 10),
+        courses: this.courseNames.slice(15, 26),
+        groupA: {
+          courses: this.courseNames.slice(15, 18),
         },
-        group2: {
-          courses: this.courseNames.slice(10, 14),
+        groupB: {
+          courses: this.courseNames.slice(18, 22),
         },
-        group3: {
-          courses: this.courseNames.slice(14, this.courseNames.length + 1),
+        groupC: {
+          courses: this.courseNames.slice(22, 26),
         },
+      },
+      culm: {
+        courses: this.courseNames.slice(26, this.courseNames.length + 1),
       },
     };
   }
 
   checker = () => {
     const failures = [];
+    // Prerequisites
+    let passed = true;
+    this.state.courses.filter(req => (this.requirements.pre.courses.includes(req.name))).forEach((req) => {
+      if (!req.took) passed = false;
+    });
+    if (!passed) {
+      failures.push('Prerequisites / Need all courses');
+    }
     // Core
     // Group 1
-    let passed = true;
-    // this.state.courses.filter(req => (req.name === 'ENGS 22' || req.name === 'ENGS 27' || req.name === 'ENGS 31')).forEach((req) => {
-    //   if (!req.took) passed = false;
-    // });
-    this.state.courses.filter(req => (this.requirements.core.group1.courses.includes(req.name))).forEach((req) => {
+    passed = true;
+    this.state.courses.filter(req => (this.requirements.core.groupA.courses.includes(req.name))).forEach((req) => {
       if (!req.took) passed = false;
     });
     if (!passed) {
@@ -120,10 +156,7 @@ class Main extends React.Component {
 
     // Group 2
     passed = false;
-    // this.state.courses.filter(req => (req.name === 'ENGS 23' || req.name === 'ENGS 24')).forEach((req) => {
-    //   if (req.took) passed = true;
-    // });s
-    this.state.courses.filter(req => (this.requirements.core.group2.courses.includes(req.name))).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.core.groupB.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -132,7 +165,7 @@ class Main extends React.Component {
 
     // Computer Science
     passed = false;
-    this.state.courses.filter(req => (this.requirements.computerScience.courses.includes(req.name))).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.core.computerScience.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -145,7 +178,7 @@ class Main extends React.Component {
 
     // Group 1
     passed = false;
-    this.state.courses.filter(req => (this.requirements.breadth.group1.courses.includes(req.name))).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.breadth.groupA.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -154,7 +187,7 @@ class Main extends React.Component {
 
     // Group 2
     passed = false;
-    this.state.courses.filter(req => (this.requirements.breadth.group2.courses.includes(req.name))).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.breadth.groupB.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -163,7 +196,7 @@ class Main extends React.Component {
 
     // Group 3
     passed = false;
-    this.state.courses.filter(req => (this.requirements.breadth.group3.courses.includes(req.name))).forEach((req) => {
+    this.state.courses.filter(req => (this.requirements.breadth.groupC.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
     });
     if (!passed) {
@@ -171,6 +204,15 @@ class Main extends React.Component {
     }
     // 3 computer science
     if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name)) && (req.name.substring(0, 4) === 'COSC') && (req.took))).length < 3) failures.push('Breadth / Need at least 3 computer science courses');
+
+    // Culminating
+    passed = false;
+    this.state.courses.filter(req => (this.requirements.culm.courses.includes(req.name))).forEach((req) => {
+      if (req.took) passed = true;
+    });
+    if (!passed) {
+      failures.push('Culminating Experience / Need at least one culminating experience');
+    }
     return failures;
   }
 
@@ -196,12 +238,31 @@ class Main extends React.Component {
     const { classes } = this.props;
     return (
       <div id="checkList">
+        <div id="pre">
+          <Typography variant="h5">Prerequisites</Typography>
+          <List className={classes.root}>
+            {
+              this.state.courses.filter(req => (this.requirements.pre.courses.includes(req.name))).map((req, index) => (
+                <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
+                  <Checkbox
+                    checked={req.took}
+                    tabIndex={-1}
+                    disableRipple
+                    className={classes.skinnyCheckBox}
+                    color="primary"
+                  />
+                  <ListItemText primary={req.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+        </div>
         <div id="core">
           <Typography variant="h5">Core</Typography>
           <Typography variant="subheading">Group 1</Typography>
           <List className={classes.root}>
             {
-              this.state.courses.filter(req => (this.requirements.core.group1.courses.includes(req.name))).map((req, index) => (
+              this.state.courses.filter(req => (this.requirements.core.groupA.courses.includes(req.name))).map((req, index) => (
                 <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
                   <Checkbox
                     checked={req.took}
@@ -218,7 +279,7 @@ class Main extends React.Component {
           <Typography variant="subheading">Group 2</Typography>
           <List className={classes.root}>
             {
-              this.state.courses.filter(req => (this.requirements.core.group2.courses.includes(req.name))).map((req, index) => (
+              this.state.courses.filter(req => (this.requirements.core.groupB.courses.includes(req.name))).map((req, index) => (
                 <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
                   <Checkbox
                     checked={req.took}
@@ -232,12 +293,10 @@ class Main extends React.Component {
               ))
             }
           </List>
-        </div>
-        <div id="computer science">
-          <Typography variant="h5">Computer Science</Typography>
+          <Typography variant="subheading">Computer Science</Typography>
           <List className={classes.root}>
             {
-              this.state.courses.filter(req => (this.requirements.computerScience.courses.includes(req.name))).map((req, index) => (
+              this.state.courses.filter(req => (this.requirements.core.computerScience.courses.includes(req.name))).map((req, index) => (
                 <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
                   <Checkbox
                     checked={req.took}
@@ -257,7 +316,7 @@ class Main extends React.Component {
           <Typography variant="subheading">Group 1</Typography>
           <List className={classes.root}>
             {
-              this.state.courses.filter(req => (this.requirements.breadth.group1.courses.includes(req.name))).map((req, index) => (
+              this.state.courses.filter(req => (this.requirements.breadth.groupA.courses.includes(req.name))).map((req, index) => (
                 <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
                   <Checkbox
                     checked={req.took}
@@ -274,7 +333,7 @@ class Main extends React.Component {
           <Typography variant="subheading">Group 2</Typography>
           <List className={classes.root}>
             {
-              this.state.courses.filter(req => (this.requirements.breadth.group2.courses.includes(req.name))).map((req, index) => (
+              this.state.courses.filter(req => (this.requirements.breadth.groupB.courses.includes(req.name))).map((req, index) => (
                 <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
                   <Checkbox
                     checked={req.took}
@@ -291,7 +350,26 @@ class Main extends React.Component {
           <Typography variant="subheading">Group 3</Typography>
           <List className={classes.root}>
             {
-              this.state.courses.filter(req => (this.requirements.breadth.group3.courses.includes(req.name))).map((req, index) => (
+              this.state.courses.filter(req => (this.requirements.breadth.groupC.courses.includes(req.name))).map((req, index) => (
+                <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
+                  <Checkbox
+                    checked={req.took}
+                    tabIndex={-1}
+                    disableRipple
+                    className={classes.skinnyCheckBox}
+                    color="primary"
+                  />
+                  <ListItemText primary={req.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+        </div>
+        <div id="culm">
+          <Typography variant="h5">Culminating</Typography>
+          <List className={classes.root}>
+            {
+              this.state.courses.filter(req => (this.requirements.culm.courses.includes(req.name))).map((req, index) => (
                 <ListItem key={index} dense button onClick={() => this.handleToggle(req.name)}>
                   <Checkbox
                     checked={req.took}
@@ -328,11 +406,11 @@ class Main extends React.Component {
           <Typography variant="subtitle1" className={classes.mb}>Completed classes</Typography>
           {this.renderCheckList()}
         </CardContent>
-        <CardContent id="results">
+        <CardContent id="results" className={classes.hover}>
           {result}
           {why}
           <Button variant="contained" color="primary" className={[classes.mt, classes.mb]} onClick={this.reset}>Reset</Button>
-          <Typography variant="p"><Link href="https://github.com/ziruihao/degree-checker-client">Github</Link></Typography>
+          <Typography variant="body1"><Link href="https://github.com/ziruihao/degree-checker-client">Github</Link></Typography>
         </CardContent>
       </Card>
     );
