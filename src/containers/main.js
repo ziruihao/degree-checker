@@ -42,7 +42,7 @@ const styles = {
     marginTop: 25,
   },
   hover: {
-    boxShadow: '10px 40px 142px -6px rgba(0,0,0,0.42)',
+    boxShadow: '6px 20px 40px -6px rgba(0,0,0,0.42)',
   },
   passed: {
     color: 'green',
@@ -140,7 +140,7 @@ class Main extends React.Component {
       failures.push('Prerequisites / Need all courses');
     }
     // Core
-    // Group 1
+    // Group A
     passed = true;
     this.state.courses.filter(req => (this.requirements.core.groupA.courses.includes(req.name))).forEach((req) => {
       if (!req.took) passed = false;
@@ -149,7 +149,7 @@ class Main extends React.Component {
       failures.push('Engineering Core Courses / Need all courses from Group 1');
     }
 
-    // Group 2
+    // Group B
     passed = false;
     this.state.courses.filter(req => (this.requirements.core.groupB.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
@@ -171,7 +171,7 @@ class Main extends React.Component {
     // 5 courses
     if (this.state.courses.filter(req => ((this.requirements.breadth.courses.includes(req.name) && (req.took)))).length < 5) failures.push('Breadth / Need at least 5 courses');
 
-    // Group 1
+    // Group A
     passed = false;
     this.state.courses.filter(req => (this.requirements.breadth.groupA.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
@@ -180,7 +180,7 @@ class Main extends React.Component {
       failures.push('Breadth / Need at least one from Group 1');
     }
 
-    // Group 2
+    // Group B
     passed = false;
     this.state.courses.filter(req => (this.requirements.breadth.groupB.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
@@ -189,7 +189,7 @@ class Main extends React.Component {
       failures.push('Breadth / Need at least one from Group 2');
     }
 
-    // Group 3
+    // Group C
     passed = false;
     this.state.courses.filter(req => (this.requirements.breadth.groupC.courses.includes(req.name))).forEach((req) => {
       if (req.took) passed = true;
@@ -254,7 +254,7 @@ class Main extends React.Component {
         </div>
         <div id="core">
           <Typography variant="h5">Core</Typography>
-          <Typography variant="subheading">Group 1</Typography>
+          <Typography variant="subheading">Group A</Typography>
           <List className={classes.root}>
             {
               this.state.courses.filter(req => (this.requirements.core.groupA.courses.includes(req.name))).map((req, index) => (
@@ -271,7 +271,7 @@ class Main extends React.Component {
               ))
             }
           </List>
-          <Typography variant="subheading">Group 2</Typography>
+          <Typography variant="subheading">Group B</Typography>
           <List className={classes.root}>
             {
               this.state.courses.filter(req => (this.requirements.core.groupB.courses.includes(req.name))).map((req, index) => (
@@ -308,7 +308,7 @@ class Main extends React.Component {
         </div>
         <div id="core">
           <Typography variant="h5">Breadth</Typography>
-          <Typography variant="subheading">Group 1</Typography>
+          <Typography variant="subheading">Group A</Typography>
           <List className={classes.root}>
             {
               this.state.courses.filter(req => (this.requirements.breadth.groupA.courses.includes(req.name))).map((req, index) => (
@@ -325,7 +325,7 @@ class Main extends React.Component {
               ))
             }
           </List>
-          <Typography variant="subheading">Group 2</Typography>
+          <Typography variant="subheading">Group B</Typography>
           <List className={classes.root}>
             {
               this.state.courses.filter(req => (this.requirements.breadth.groupB.courses.includes(req.name))).map((req, index) => (
@@ -342,7 +342,7 @@ class Main extends React.Component {
               ))
             }
           </List>
-          <Typography variant="subheading">Group 3</Typography>
+          <Typography variant="subheading">Group C</Typography>
           <List className={classes.root}>
             {
               this.state.courses.filter(req => (this.requirements.breadth.groupC.courses.includes(req.name))).map((req, index) => (
@@ -398,7 +398,6 @@ class Main extends React.Component {
       <Card className={classes.card}>
         <CardContent id="form">
           <Typography variant="title" className={classes.mb}>Degree Checker for ENGS modified CS</Typography>
-          <Typography variant="subtitle1" className={classes.mb}>Completed classes</Typography>
           {this.renderCheckList()}
         </CardContent>
         <CardContent id="results" className={classes.hover}>
