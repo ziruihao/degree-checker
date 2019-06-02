@@ -42,11 +42,6 @@ const styles = {
     marginTop: 25,
   },
   hover: {
-    position: 'fixed',
-    // left: 'calc(50vw + 400px)',
-    top: 60,
-    // left: '50vw',
-    // top: '20vh',
     boxShadow: '10px 40px 142px -6px rgba(0,0,0,0.42)',
   },
   passed: {
@@ -66,7 +61,7 @@ class Main extends React.Component {
         { name: 'MATH 3', took: false },
         { name: 'MATH 8', took: false },
         { name: 'MATH 13', took: false },
-        { name: 'COSC 1', took: false },
+        { name: 'COSC 1 or ENGS 20', took: false },
         { name: 'COSC 10', took: false },
         { name: 'PHYS 13', took: false },
         { name: 'PHYS 14', took: false },
